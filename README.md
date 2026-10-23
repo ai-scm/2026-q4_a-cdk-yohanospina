@@ -1,4 +1,4 @@
-# Práctica AWS CDK v2 (Python): Lambda Serverless y S3
+# Práctica AWS CDK
 
 Este repositorio contiene la solución del ejercicio práctico de **AWS CDK con Python** para el semillero. 
 
