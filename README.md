@@ -1,58 +1,70 @@
+# Práctica AWS CDK v2 (Python): Lambda Serverless y S3
 
-# Welcome to your CDK Python project!
+Este repositorio contiene la solución del ejercicio práctico de **AWS CDK con Python** para el semillero. 
 
-This is a blank project for CDK development with Python.
+---
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
+## 1. ¿Qué se construyó?
 
-This project is set up like a standard Python project.  The initialization
-process also creates a virtualenv within this project, stored under the `.venv`
-directory.  To create the virtualenv it assumes that there is a `python3`
-(or `python` for Windows) executable in your path with access to the `venv`
-package. If for any reason the automatic creation of the virtualenv fails,
-you can create the virtualenv manually.
+A través de código en Python e Infraestructura como Código (IaC) con AWS CDK:
+1. **AWS Lambda**: Se creó una función serverless en Node.js 20 con una **Function URL** pública sin autenticación que retorna `"Hello World!"`.
+2. **Amazon S3**: Se aprovisionó un bucket de S3 configurado con eliminación automática (`RemovalPolicy.DESTROY` y `autoDeleteObjects=True`).
+3. **Carga Automática**: Se utilizó el módulo `aws_s3_deployment` para subir automáticamente un archivo llamado `hola.txt` con el contenido `"hola mundo"`.
 
-To manually create a virtualenv on MacOS and Linux:
+---
 
-```
-$ python3 -m venv .venv
-```
+## 2. Comandos exactos ejecutados
 
-After the init process completes and the virtualenv is created, you can use the following
-step to activate your virtualenv.
+### A. Preparación del entorno local
+```bash
+# Instalación global del CLI de CDK mediante npm
+npm install -g aws-cdk
 
-```
-$ source .venv/bin/activate
-```
+# Verificación de la versión de CDK con npx
+npx cdk --version
 
-If you are a Windows platform, you would activate the virtualenv like this:
+# Inicialización del proyecto CDK en Python
+npx cdk init app --language python
 
-```
-% .venv\Scripts\activate.bat
-```
+# Activación del entorno virtual de Python
+source .venv/bin/activate
 
-Once the virtualenv is activated, you can install the required dependencies.
-
-```
-$ pip install -r requirements.txt
+# Instalación de las dependencias requeridas (aws-cdk-lib y constructs)
+pip install -r requirements.txt
 ```
 
-At this point you can now synthesize the CloudFormation template for this code.
+### B. Configuración de AWS y Síntesis
+```bash
+# Verificación del código e inspección de la plantilla de CloudFormation
+npx cdk synth
 
+# Configuración de credenciales de AWS CLI
+aws configure
+
+# Preparación del entorno de AWS para CDK (Bootstrapping)
+npx cdk bootstrap
 ```
-$ cdk synth
+
+### C. Despliegue de la infraestructura
+```bash
+# Despliegue de la pila en la cuenta de AWS
+npx cdk deploy
 ```
 
-To add additional dependencies, for example other CDK libraries, just add
-them to your `requirements.txt` file and rerun the `python -m pip install -r requirements.txt`
-command.
+### D. Verificación de los recursos en vivo
+```bash
+# Pruebas a la URL pública de la función Lambda
+curl https://ectno25sl656tkvv7ng5jtnpte0ivkst.lambda-url.us-east-1.on.aws/
 
-## Useful commands
+# Inicio de sesión en AWS SSO (en caso de expiración del token)
+aws sso login
 
- * `cdk ls`          list all stacks in the app
- * `cdk synth`       emits the synthesized CloudFormation template
- * `cdk deploy`      deploy this stack to your default AWS account/region
- * `cdk diff`        compare deployed stack with current state
- * `cdk docs`        open CDK documentation
+# Lectura directa del archivo subido en el bucket S3
+aws s3 cp s3://cdkstack-semillerodatabucketb4d48d6d-sjonz9qgqyvq/hola.txt -
+```
 
-Enjoy!
+### E. Destrucción de la infraestructura
+```bash
+# Eliminación completa de los recursos en AWS para evitar costos
+npx cdk destroy
+```
